@@ -1,0 +1,9 @@
+# /
+/**
+!/.gitignore
+!/LICENSE
+!/Makefile
+!/*.md
+!/*.c
+!/*.h
+
