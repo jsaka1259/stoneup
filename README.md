@@ -1,5 +1,5 @@
 # Stone Up
-This is a cui game.
+This is a CUI game.
 
 ## Build
 ```
