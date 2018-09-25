@@ -4,7 +4,16 @@
 #include <time.h>
 #include "getch.h"
 
-#define ESC 0x1B
+#define ESC "\x1B"
+#define UP(n)  printf("%s[%dA", ESC, n)
+#define CLR() printf("\r                            \r")
+#define CURSOR(cursorA, cursorB, cursorC, stoneA, stoneB, stoneC)\
+        {\
+            CLR();\
+            printf(" %sA(%2d) %sB(%2d) %sC(%2d)",\
+                   cursorA, cursorB, cursorC,\
+                   stoneA,  stoneB,  stoneC);\
+        }
 
 void sub_cpu(int *stone_num)
 {
@@ -51,14 +60,15 @@ int main(void)
     stone_num[1] = rand() % 20 + 1;
     stone_num[2] = rand() % 20 + 1;
 
-    /* Choose First */
-    printf("\r");
-    printf(" %sA(%2d) %sB(%2d) %sC(%2d)",
-           cursur_str[0], stone_num[0],
+    /* Display Selections */
+    CURSOR(cursur_str[0], stone_num[0],
            cursur_str[1], stone_num[1],
            cursur_str[2], stone_num[2]);
-    printf("\n\r");
-    printf("You or CPU or Quit(y/c/q): ");
+    printf("\n");
+    CLR();
+    printf("You or CPU or Quit (y/c/q):");
+
+    /* Choose First or Quit */
     while(1)
     {
         cmd = getch();
@@ -81,9 +91,9 @@ int main(void)
             continue;
         }
     }
-    printf("\r");
-    printf("                           ");
-    printf("\033[1A");
+
+    CLR();
+    UP(1);
 
     /* Case: CPU First */
     if(turn == 1)
@@ -94,14 +104,15 @@ int main(void)
 
     while(1)
     {
-        printf("\r");
-        printf(" %sA(%2d) %sB(%2d) %sC(%2d)",
-               cursur_str[0], stone_num[0],
+        /* Display */
+        CURSOR(cursur_str[0], stone_num[0],
                cursur_str[1], stone_num[1],
                cursur_str[2], stone_num[2]);
-        
+       
         turn = 0;
+
         cmd = getch();
+
         if(cmd == 'q')
         {
             printf("\n");
@@ -113,24 +124,31 @@ int main(void)
             if((stone_num[cursur] - current_num) < 0)
             {
                 printf("\n");
-                printf("cannot the subtraction     ");
-                getch();
-                printf("\r");
-                printf("                           ");
-                printf("\033[1A");
+                CLR();
+                printf("cannot the subtraction: Press any key");
+                getch();    
+                CLR();
+                UP(1);
+                
                 continue;
             }
             else
+            {
                 stone_num[cursur] -= current_num;
-            
+            }
+
             if(judgment_win(stone_num) == 1)
+            {
                 break;
+            }
 
             turn = 1;
             sub_cpu(stone_num);
 
             if(judgment_win(stone_num) == 1)
+            {
                 break;
+            }
         }
         else if(cmd == 'a')
         {
@@ -154,21 +172,33 @@ int main(void)
             strcpy(cursur_str[2], "->");
         }
         else
-            continue;
+        {
+            printf("\n");
+            CLR();
+            printf("Please input [a, b, c, q]: Press any key");
+            getch();
+            CLR();
+            UP(1);
+        }
     }
 
-    /* Determinate Winner */
-    printf("\r");
-    printf(" %sA(%2d) %sB(%2d) %sC(%2d)",
-           cursur_str[0], stone_num[0],
+    /* Display */
+    CURSOR(cursur_str[0], stone_num[0],
            cursur_str[1], stone_num[1],
            cursur_str[2], stone_num[2]);
-    printf("\n\r");
-    if(turn == 0)
-        printf("You win.                   ");
-    else
-        printf("You lose.                  ");
+
     printf("\n");
+    CLR();
+
+    /* Determinate Winner */
+    if(turn == 0)
+    {
+        printf("You win.\n");
+    }
+    else
+    {
+        printf("You lose.\n");
+    }
     
     return 0;   
 }
