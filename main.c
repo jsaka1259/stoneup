@@ -119,6 +119,7 @@ int main(void)
 
       if (judgment_win(stone_num) == 1)
         break;
+
       turn = 1;
       sub_cpu(stone_num);
 
@@ -126,7 +127,6 @@ int main(void)
         break;
     } else {
       switch (cmd) {
-          break;
         case 'a':
           cursur = 0;
           strcpy(cursur_str[0], "->");
