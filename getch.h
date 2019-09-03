@@ -1,7 +1,7 @@
-#ifndef GETCH_H
-#define GETCH_H
+#ifndef _GETCH_H_
+#define _GETCH_H_
 
 extern int getch(void);
 
-#endif /* GETCH_H */
+#endif
 
